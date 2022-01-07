@@ -49,7 +49,7 @@ it('Check second example', () => {
     .uncheck({force: true})
 });
 
-it('Select first example', () => {
+it.only('Select first example', () => {
     cy.viewport('macbook-15')
     cy.visit('https://blsspain-belarus.com/book_appointment.php')
     .get('div[class="marginRight padding-sm"]').contains('click here')
@@ -68,7 +68,7 @@ it('ScrollIntoView first example', () => {
     .scrollIntoView()
 });
 
-it.only('Trigger first example', () => {
+it('Trigger first example', () => {
     cy.visit('https://next.privat24.ua/mobile?lang=en')
     cy.contains('Services')
     .wait(3000)
