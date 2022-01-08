@@ -41,3 +41,39 @@ it('Money transfer between forein cards', () => {
     transfers.checkTotalAmount('Total to debit', '387.49', 'UAH');
     transfers.checkComment('Cypress test')
 });
+
+it('GET request example', () => {
+    cy.request('https://next.privat24.ua')
+        .then((response) => {
+            console.log(response);
+        });
+});
+
+it.only('POST request example', () => {
+
+    const requestBody = {
+        "action":"info",
+        "phone":"+380686979712",
+        "amount":50,
+        "currency":"UAH",
+        "cardCvv":"123",
+        "card":"4552331448138217",
+        "cardExp":"0524",
+        "xref":"3f66cc9eb25a872998e39901cec63629",
+        "_":1641668033122
+    };
+
+    const headersData = {
+        cookie: 
+            '_ga=GA1.2.1158378916.1641325398; _gid=GA1.2.59987440.1641325398; pubkey=a6d8011d3850371827c88e3b2c9154e9; fp=40; lfp=1/4/2022, 10:43:29 PM; pa=1641325410012.53660.24507622837432508next.privat24.ua0.8746741302583594+16',
+    };
+
+    cy.request({
+        method: 'POST',
+        url: 'https://next.privat24.ua/api/p24/pub/mobipay',
+        body: requestBody,
+        headers: headersData,
+    }).then((response) => {
+        console.log(response.body);
+    });
+});
