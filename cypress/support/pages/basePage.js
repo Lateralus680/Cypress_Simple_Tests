@@ -1,4 +1,8 @@
 export class BasePage{
+    open(url){
+        cy.visit(url)
+    }
+
     typeAmount(amount){
         cy.get('[data-qa-node="amount"]')
             .type(amount)
