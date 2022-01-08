@@ -21,12 +21,12 @@ it('Mobile phone number replenishment', () => {
 
 it.only('Money transfer between forein cards', () => {
     cy.visit('https://next.privat24.ua/money-transfer/card?lang=en')
-    mobileRep.typeDebitCardData('4552331448138217', '0524', '123');
-    mobileRep.typeDebitCardName('YULYA', 'IGNATSIUK');
+    transfers.typeDebitCardData('4552331448138217', '0524', '123');
+    transfers.typeDebitCardName('YULYA', 'IGNATSIUK');
     transfers.typeRecieverCardNumber('5309233034765085');
     cy.wait(2000);
     transfers.typeRecieverCardName('ILIA', 'GENDIK')
-    mobileRep.typeAmount('300');
+    transfers.typeAmount('300');
     transfers.typeComment('Cypress test');
     cy.wait(3000);
     transfers.submitTransfer();
