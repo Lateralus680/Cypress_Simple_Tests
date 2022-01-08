@@ -1,39 +1,42 @@
 /// <reference types="Cypress" />
 
+import { mobileRep } from "../support/pages/mobileRep"
+import { transfers } from "../support/pages/transfers";
+
 it('Mobile phone number replenishment', () => {
     cy.visit('https://next.privat24.ua/mobile?lang=en')
-    .get('[data-qa-node="phone-number"]')
-    .type('678456738')
-    .get('[data-qa-node="amount"]')
-    .type('1')
-    .get('[data-qa-node="numberdebitSource"]')
-    .type('4552331448138217')
-    .get('[data-qa-node="expiredebitSource"]')
-    .type('0524')
-    .get('[data-qa-node="cvvdebitSource"]')
-    .type('123')
-    .wait(2000)
-    .get('[data-qa-node="firstNamedebitSource"]')
-    .type('YULYA')
-    .get('[data-qa-node="lastNamedebitSource"]')
-    .type('IGNATSIUK')
-    .wait(3000)
-    .get('[data-qa-node="submit"]')
-    .click()
-    .get('[data-qa-node="card"]')
-    .should('have.text', '4552 **** **** 8217')
-    .get('[data-qa-node="amount"]')
-    .eq('1')
-    .should('contain.text', '1')
-    .get('[data-qa-node="amount"]')
-    .eq('1')
-    .should('contain.text', 'UAH')
-    .get('[data-qa-node="commission"]')
-    .eq('1')
-    .should('contain.text', '2')
-    .get('[data-qa-node="commission-currency"]')
-    .should('contain.text', 'UAH')
+    mobileRep.typePhoneNumber('678456738');
+    mobileRep.typeAmount('1');
+    mobileRep.typeDebitCardData('4552331448138217', '0524', '123');
+    cy.wait(2000);
+    mobileRep.typeDebitCardName('YULYA', 'IGNATSIUK');
+    cy.wait(3000);
+    mobileRep.submitPayment();
+    mobileRep.checkDebitCard('4552 **** **** 8217');
+    mobileRep.checkAmount('1');
+    mobileRep.checkAmount('UAH');
+    mobileRep.checkCommission('2');
+    mobileRep.checkCommissionCurrency('UAH')
 });
 
-
-
+it.only('Money transfer between forein cards', () => {
+    cy.visit('https://next.privat24.ua/money-transfer/card?lang=en')
+    mobileRep.typeDebitCardData('4552331448138217', '0524', '123');
+    mobileRep.typeDebitCardName('YULYA', 'IGNATSIUK');
+    transfers.typeRecieverCardNumber('5309233034765085');
+    cy.wait(2000);
+    transfers.typeRecieverCardName('ILIA', 'GENDIK')
+    mobileRep.typeAmount('300');
+    transfers.typeComment('Cypress test');
+    cy.wait(3000);
+    transfers.submitTransfer();
+    cy.wait(2000);
+    transfers.checkPayerCardNumber('4552 3314 4813 8217');
+    transfers.checkRecieverCardNumber('5309 2330 3476 5085');
+    transfers.checkPayerAmount('300 UAH');
+    transfers.checkPayerCommission('87.49 UAH');
+    transfers.checkRecieverAmount('300 UAH');
+    transfers.checkRecieverCommission('0 UAH');
+    transfers.checkTotalAmount('Total to debit', '387.49', 'UAH');
+    transfers.checkComment('Cypress test')
+});
