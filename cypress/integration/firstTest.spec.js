@@ -4,9 +4,14 @@ import { basePage } from "../support/pages/basePage";
 import { mobileRep } from "../support/pages/mobileRep"
 import { transfers } from "../support/pages/transfers";
 
+beforeEach('Setup success response with stub', () => {
+    cy.intercept('https://next.privat24.ua/api/p24/pub/confirm/check?',
+    {fixture: 'confirmResponse/success.json'})
+});
+
 it('Mobile phone number replenishment', () => {
     basePage.open('https://next.privat24.ua/mobile?lang=en')
-    mobileRep.typePhoneNumber('678456738');
+    mobileRep.typePhoneNumber('686979712');
     basePage.typeAmount('1');
     basePage.typeDebitCardData('4552331448138217', '0524', '123');
     cy.wait(2000);
@@ -18,9 +23,11 @@ it('Mobile phone number replenishment', () => {
     mobileRep.checkAmount('UAH');
     mobileRep.checkCommission('2');
     mobileRep.checkCommissionCurrency('UAH')
+    cy.contains('Pay')
+    .click()
 });
 
-it('Money transfer between forein cards', () => {
+it.skip('Money transfer between forein cards', () => {
     basePage.open('https://next.privat24.ua/money-transfer/card?lang=en')
     basePage.typeDebitCardData('4552331448138217', '0524', '123');
     basePage.typeDebitCardName('YULYA', 'IGNATSIUK');
@@ -42,14 +49,14 @@ it('Money transfer between forein cards', () => {
     transfers.checkComment('Cypress test')
 });
 
-it('GET request example', () => {
+it.skip('GET request example', () => {
     cy.request('https://next.privat24.ua')
         .then((response) => {
             console.log(response);
         });
 });
 
-it('POST request example', () => {
+it.skip('POST request example', () => {
 
     const requestBody = {
         "action":"info",
@@ -81,7 +88,7 @@ it('POST request example', () => {
     });
 });
 
-it.only('POST request example with should()', () => {
+it.skip('POST request example with should()', () => {
 
     const requestBody = {
         "action":"info",
