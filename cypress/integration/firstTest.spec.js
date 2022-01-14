@@ -14,7 +14,7 @@ beforeEach('Setup success response with stub', () => {
     });
 });
 
-it.skip('Mobile phone number replenishment', () => {
+it('Mobile phone number replenishment', () => {
     basePage.open('https://next.privat24.ua/mobile?lang=en');
     mobileRep.typePhoneNumber('686979712');
     basePage.typeAmount('1');
@@ -37,36 +37,37 @@ it('Check state of payment', () => {
     archivePage.selectArchiveMenu();
 });
 
-it.skip('Money transfer between forein cards', () => {
+it.only('Money transfer between forein cards', () => {
     basePage.open('https://next.privat24.ua/money-transfer/card?lang=en');
     basePage.typeDebitCardData('4552331448138217', '0524', '123');
     basePage.typeDebitCardName('YULYA', 'IGNATSIUK');
     transfers.typeRecieverCardNumber('5309233034765085');
     cy.wait(2000);
     transfers.typeRecieverCardName('ILIA', 'GENDIK');
-    basePage.typeAmount('300');
+    basePage.typeAmount('320');
     transfers.typeComment('Cypress test');
     cy.wait(3000);
     transfers.submitTransfer();
     cy.wait(2000);
     transfers.checkPayerCardNumber('4552 3314 4813 8217');
     transfers.checkRecieverCardNumber('5309 2330 3476 5085');
-    transfers.checkPayerAmount('300 UAH');
-    transfers.checkPayerCommission('87.49 UAH');
-    transfers.checkRecieverAmount('300 UAH');
+    transfers.checkPayerAmount('320 UAH');
+    transfers.checkPayerCommission('89.03 UAH');
+    transfers.checkRecieverAmount('320 UAH');
     transfers.checkRecieverCommission('0 UAH');
-    transfers.checkTotalAmount('Total to debit', '387.49', 'UAH');
-    transfers.checkComment('Cypress test')
+    transfers.checkTotalAmount('Total to debit', '409.03', 'UAH');
+    transfers.checkComment('Cypress test');
+    cy.wait(2000).get('[class="content_19lkXZSYWo"]').toMatchImageSnapshot();
 });
 
-it.skip('GET request example', () => {
+it('GET request example', () => {
     cy.request('https://next.privat24.ua')
         .then((response) => {
             console.log(response);
         });
 });
 
-it.skip('POST request example', () => {
+it('POST request example', () => {
 
     const requestBody = {
         "action":"info",
@@ -98,7 +99,7 @@ it.skip('POST request example', () => {
     });
 });
 
-it.skip('POST request example with should()', () => {
+it('POST request example with should()', () => {
 
     const requestBody = {
         "action":"info",
