@@ -1,16 +1,21 @@
 /// <reference types="Cypress" />
 
 import { basePage } from "../support/pages/basePage";
-import { mobileRep } from "../support/pages/mobileRep"
+import { mobileRep } from "../support/pages/mobileRep";
 import { transfers } from "../support/pages/transfers";
+import { archivePage } from "../support/pages/archive";
 
 beforeEach('Setup success response with stub', () => {
-    cy.intercept('https://next.privat24.ua/api/p24/pub/confirm/check?',
-    {fixture: 'confirmResponse/success.json'})
+    cy.intercept('https://next.privat24.ua/api/p24/pub/confirm/check?', {
+        fixture: 'confirmResponse/success.json',
+    });
+    cy.intercept('https://next.privat24.ua/api/p24/pub/archive', {
+        fixture: 'archiveResponse/success.json',
+    });
 });
 
-it('Mobile phone number replenishment', () => {
-    basePage.open('https://next.privat24.ua/mobile?lang=en')
+it.skip('Mobile phone number replenishment', () => {
+    basePage.open('https://next.privat24.ua/mobile?lang=en');
     mobileRep.typePhoneNumber('686979712');
     basePage.typeAmount('1');
     basePage.typeDebitCardData('4552331448138217', '0524', '123');
@@ -22,18 +27,23 @@ it('Mobile phone number replenishment', () => {
     mobileRep.checkAmount('1');
     mobileRep.checkAmount('UAH');
     mobileRep.checkCommission('2');
-    mobileRep.checkCommissionCurrency('UAH')
+    mobileRep.checkCommissionCurrency('UAH');
     cy.contains('Pay')
-    .click()
+    .click();
+});
+
+it('Check state of payment', () => {
+    basePage.open('https://next.privat24.ua?lang=en');
+    archivePage.selectArchiveMenu();
 });
 
 it.skip('Money transfer between forein cards', () => {
-    basePage.open('https://next.privat24.ua/money-transfer/card?lang=en')
+    basePage.open('https://next.privat24.ua/money-transfer/card?lang=en');
     basePage.typeDebitCardData('4552331448138217', '0524', '123');
     basePage.typeDebitCardName('YULYA', 'IGNATSIUK');
     transfers.typeRecieverCardNumber('5309233034765085');
     cy.wait(2000);
-    transfers.typeRecieverCardName('ILIA', 'GENDIK')
+    transfers.typeRecieverCardName('ILIA', 'GENDIK');
     basePage.typeAmount('300');
     transfers.typeComment('Cypress test');
     cy.wait(3000);
